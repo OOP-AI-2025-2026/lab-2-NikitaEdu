@@ -3,44 +3,79 @@ package ua.opnu;
 
 public class TimeSpan {
 
-    // TODO: add class fields
+    int hours;
+    int minutes;
 
     TimeSpan(int hours, int minutes) {
-        // TODO: write constructor body
+        if (hours < 0 || minutes < 0 || minutes > 59) {
+            System.out.println("Неправильний формат часу: години >= 0, хвилини від 0 до 59.");
+        }else{
+            this.hours = hours;
+            this.minutes = minutes;
+        }
     }
 
     int getHours() {
-        return 0;
+        return hours;
     }
 
     int getMinutes() {
-        // TODO: write method body
-        return 0;
+        return minutes;
     }
 
     void add(int hours, int minutes) {
-        // TODO: write method body
+        if (hours < 0 || minutes < 0 || minutes > 59) {
+            System.out.println("Неправильний формат часу: години >= 0, хвилини від 0 до 59.");
+        }else{
+            this.hours += hours;
+            this.minutes += minutes;
+            normalizeTime();
+        }
+
     }
 
-    void addTimeSpan(TimeSpan timespan) {
-        // TODO: write method body
+    public void addTimeSpan(TimeSpan timeSpan) {
+        this.hours += timeSpan.getHours();
+        this.minutes += timeSpan.getMinutes();
+        normalizeTime();
+    }
+
+    private void normalizeTime() {
+        if (minutes >= 60) {
+            hours += minutes / 60;
+            minutes = minutes % 60;
+        }
     }
 
     double getTotalHours() {
-        // TODO: write method body
-        return 0;
+        return this.hours + (double) minutes / 60;
     }
 
     int getTotalMinutes() {
-        // TODO: write method body
-        return 0;
+        return hours * 60 + this.minutes;
     }
 
     void subtract(TimeSpan span) {
-        // TODO: write method body
+        int totalMinutesThis = this.hours * 60 + this.minutes;
+        int totalMinutesOther = span.getHours() * 60 + span.getMinutes();
+
+        if (totalMinutesOther > totalMinutesThis) {
+            System.out.println("Вхідний інтервал більший за поточний, інтервал не змінюється.");
+            return;
+        }
+
+        int remainingMinutes = totalMinutesThis - totalMinutesOther;
+        this.hours = remainingMinutes / 60;
+        this.minutes = remainingMinutes % 60;
     }
 
     void scale(int factor) {
-        // TODO: write method body
+        if (factor <= 0) {
+            System.out.println("Фактор повинен бути більше нуля.");
+        } else{
+            int totalMinutes = (this.hours * 60 + this.minutes) * factor;
+            this.hours = totalMinutes / 60;
+            this.minutes = totalMinutes % 60;
+        }
     }
 }
